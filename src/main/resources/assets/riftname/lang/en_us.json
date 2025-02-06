@@ -1,0 +1,14 @@
+{  "argument.textcolor.invalid": "%s is not a valid color code!",
+"message.riftname.nick.clear": "Cleared your nick name!",
+"message.riftname.nick.set": "Set your nick name to %s!",
+"message.riftname.formatting.clear": "Cleared the formatting from your name!",
+"message.riftname.formatting.set": "Added the formatting %s to your name",
+"message.riftname.color.clear": "Cleared the custom color from your name!",
+"message.riftname.color.set": "Set your name's custom color to %s!",
+"message.riftname.tag.clear": "Cleared the tag from your name!",
+"message.riftname.tag.unstyle.success": "The custom styles have been removed from your tag!",
+"message.riftname.tag.unstyle.failure": "You have no tag, or it is already unstyled!",
+"message.riftname.tag.set.stringy": "Your tag has been set to string %s!",
+"message.riftname.tag.set.text": "Your tag has been set to text "
+
+}
