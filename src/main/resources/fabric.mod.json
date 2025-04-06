@@ -3,15 +3,15 @@
 	"id": "riftname",
 	"version": "${version}",
 	"name": "Riftname",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A fabric mod for styling your name on servers",
 	"authors": [
-		"Me!"
+		"Farpo"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://nexusrealms.de/",
+		"sources": "https://github.com/Nexusrealms/riftname"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/riftname/icon.png",
 	"environment": "*",
 	"entrypoints": {
