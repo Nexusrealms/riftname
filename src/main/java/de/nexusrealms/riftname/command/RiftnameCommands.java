@@ -4,9 +4,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import de.nexusrealms.riftname.RiftnameApi;
 import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.command.argument.StyleArgumentType;
 import net.minecraft.command.argument.TextArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
@@ -82,27 +85,30 @@ public class RiftnameCommands {
                             return 1;
                         }))
                 .then(literal("set")
-                        .then(literal("stringy")
-                                .then(argument("tag", StringArgumentType.string())
+                        .then(literal("style")
+                                .then(argument("style", StyleArgumentType.style(registryAccess))
                                         .requires(ServerCommandSource::isExecutedByPlayer)
                                         .executes(commandContext -> {
                                             try {
-                                                String tag = StringArgumentType.getString(commandContext, "tag");
-                                                RiftnameApi.setStringyTag(commandContext.getSource().getPlayer(), tag);
-                                                commandContext.getSource().sendFeedback(() -> Text.translatable("message.riftname.tag.set.stringy", tag), false);
-
+                                                Style style = StyleArgumentType.getStyle(commandContext, "style");
+                                                boolean bool = RiftnameApi.setTagStyle(commandContext.getSource().getPlayer(), style);
+                                                if(bool){
+                                                    commandContext.getSource().sendFeedback(() -> Text.translatable("message.riftname.tag.set.style").append(RiftnameApi.getFormattedTag(commandContext.getSource().getPlayer()).get()), false);
+                                                } else {
+                                                    commandContext.getSource().sendError(Text.translatable("message.riftname.tag.set.style.not"));
+                                                }
                                             } catch (Exception e){
                                                 e.printStackTrace();
                                             }
                                             return 1;
                                         })))
                         .then(literal("text")
-                                .then(argument("tag", TextArgumentType.text(registryAccess))
+                                .then(argument("text", TextArgumentType.text(registryAccess))
                                         .requires(ServerCommandSource::isExecutedByPlayer)
                                         .executes(commandContext -> {
-                                            Text tag = TextArgumentType.getTextArgument(commandContext, "tag");
-                                            RiftnameApi.setTextTag(commandContext.getSource().getPlayer(), tag);
-                                            commandContext.getSource().sendFeedback(() -> Text.translatable("message.riftname.tag.set.text").append(tag).append("!"), false);
+                                            Text tag = TextArgumentType.getTextArgument(commandContext, "text");
+                                            RiftnameApi.setTagText(commandContext.getSource().getPlayer(), tag);
+                                            commandContext.getSource().sendFeedback(() -> Text.translatable("message.riftname.tag.set.text").append(RiftnameApi.getFormattedTag(commandContext.getSource().getPlayer()).get()).append("!"), false);
                                             return 1;
                                         })))));
 

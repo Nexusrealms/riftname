@@ -3,7 +3,6 @@
   "package": "de.nexusrealms.riftname.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ExampleMixin",
     "PlayerEntityMixin",
     "TextColorAccessor"
   ],
