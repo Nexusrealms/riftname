@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.nexusrealms.riftname.command.FormattingArgumentType;
+import de.nexusrealms.riftname.command.GradientArgumentType;
 import de.nexusrealms.riftname.command.RiftnameCommands;
 import de.nexusrealms.riftname.command.TextColorArgumentType;
 import net.fabricmc.api.ModInitializer;
@@ -48,6 +49,7 @@ public class Riftname implements ModInitializer, ScoreboardComponentInitializer 
 		// Proceed with mild caution.
 		ArgumentTypeRegistry.registerArgumentType(Identifier.of(MOD_ID, "formatting"), FormattingArgumentType.class, ConstantArgumentSerializer.of(FormattingArgumentType::formatting));
 		ArgumentTypeRegistry.registerArgumentType(Identifier.of(MOD_ID, "text_color"), TextColorArgumentType.class, ConstantArgumentSerializer.of(TextColorArgumentType::textColor));
+		ArgumentTypeRegistry.registerArgumentType(Identifier.of(MOD_ID, "gradient"), GradientArgumentType.class, ConstantArgumentSerializer.of(GradientArgumentType::text));
 
 		LOGGER.info(Codecs.createPairCodec(Codec.STRING, Codec.INT).encodeStart(JsonOps.INSTANCE, new Pair<>("hello", 12345)).getOrThrow().toString());
 		CommandRegistrationCallback.EVENT.register(RiftnameCommands::registerCommands);
@@ -67,24 +69,7 @@ public class Riftname implements ModInitializer, ScoreboardComponentInitializer 
 					).apply(pairInstance, Pair::new));
 		}
 
-		private static <A, B> Pair<A, Optional<B>> eitherToOptionalMapper(Either<A, Pair<A, B>> either){
-			return either.map(a -> new Pair<>(a, Optional.empty()),
-					pair -> pair.mapSecond(Optional::of));
-		}
-		private static <A, B> Either<A, Pair<A, B>> optionalToEitherMapper(Pair<A, Optional<B>> pair){
-			if(pair.getSecond().isPresent()){
-				return Either.right(pair.mapSecond(Optional::get));
-			} else {
-				return Either.left(pair.getFirst());
-			}
-		}
-		public static final Codec<Map<UUID, Pair<Text, Optional<Style>>>> PLAYER_TAG_CODEC = Codec.unboundedMap(Uuids.CODEC,
-				Codec.either(TextCodecs.CODEC,
-						createPairCodec(TextCodecs.CODEC, Style.Codecs.CODEC))
-						.xmap(Codecs::eitherToOptionalMapper, Codecs::optionalToEitherMapper))
-				.xmap(HashMap::new, Function.identity());
-		public static final Codec<Map<UUID, String>> PLAYER_NICK_NAME_CODEC = Codec.unboundedMap(Uuids.CODEC, Codec.STRING).xmap(HashMap::new, Function.identity());;
-		public static final Codec<Map<UUID, TextColor>> PLAYER_TEXT_COLOR_CODEC = Codec.unboundedMap(Uuids.CODEC, TextColor.CODEC).xmap(HashMap::new, Function.identity());;
-		public static final Codec<Map<UUID, List<Formatting>>> PLAYER_FORMATTING_CODEC = Codec.unboundedMap(Uuids.CODEC, Formatting.CODEC.listOf()).xmap(HashMap::new, Function.identity());;
+		public static final Codec<Map<UUID,  Pair<Text, Boolean>>> PLAYER_NICK_NAME_CODEC = Codec.unboundedMap(Uuids.CODEC, createPairCodec(TextCodecs.CODEC, Codec.BOOL)).xmap(HashMap::new, Function.identity());;
+		public static final Codec<Map<UUID, Style>> PLAYER_STYLE_CODEC = Codec.unboundedMap(Uuids.CODEC, Style.Codecs.CODEC).xmap(HashMap::new, Function.identity());
 	}
 }
