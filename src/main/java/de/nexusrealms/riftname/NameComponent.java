@@ -1,11 +1,6 @@
 package de.nexusrealms.riftname;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
@@ -68,25 +63,13 @@ public class NameComponent implements AutoSyncedComponent {
         nickNames.remove(player.getUuid());
     }
     public void setHexColor(ServerPlayerEntity player, TextColor color){
-        nameStyles.compute(player.getUuid(), (uuid, style) -> {
-            if (style == null){
-                return Style.EMPTY.withColor(color);
-            } else {
-                return style.withColor(color);
-            }
-        });
+        nameStyles.compute(player.getUuid(), (uuid, style) -> Objects.requireNonNullElse(style, Style.EMPTY).withColor(color));
     }
     public void clearStyle(ServerPlayerEntity player){
         nameStyles.remove(player.getUuid());
     }
     public void addFormatting(ServerPlayerEntity player, Formatting formatting){
-        nameStyles.compute(player.getUuid(), (uuid, style) -> {
-            if (style == null){
-                return Style.EMPTY.withFormatting(formatting);
-            } else {
-                return style.withFormatting(formatting);
-            }
-        });
+        nameStyles.compute(player.getUuid(), (uuid, style) -> Objects.requireNonNullElse(style, Style.EMPTY).withFormatting(formatting));
     }
     public void clearTag(ServerPlayerEntity player){
         tags.remove(player.getUuid());
