@@ -12,12 +12,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class RiftnameApi {
+    private static Text sanitize(Text source){
+        Style style = source.getStyle().withClickEvent(null).withHoverEvent(null);
+        return source.copy().setStyle(style);
+    }
     public static void setTag(ServerPlayerEntity player, String tag){
         player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setTag(player, Text.literal(tag), true);
         Riftname.NAME_COMPONENT.sync(player.getScoreboard());
     }
     public static void setTag(ServerPlayerEntity player, Text tag){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setTag(player, tag, false);
+        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setTag(player, sanitize(tag), false);
         Riftname.NAME_COMPONENT.sync(player.getScoreboard());
     }
     public static Optional<Boolean> toggleTagStyleOverride(ServerPlayerEntity player){
@@ -34,7 +38,7 @@ public class RiftnameApi {
         Riftname.NAME_COMPONENT.sync(player.getScoreboard());
     }
     public static void setNick(ServerPlayerEntity player, Text nick){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setNick(player, nick, false);
+        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setNick(player, sanitize(nick), false);
         Riftname.NAME_COMPONENT.sync(player.getScoreboard());
     }
     public static Optional<Boolean> toggleNickStyleOverride(ServerPlayerEntity player){
