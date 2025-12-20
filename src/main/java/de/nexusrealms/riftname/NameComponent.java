@@ -1,14 +1,10 @@
 package de.nexusrealms.riftname;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -68,25 +64,13 @@ public class NameComponent implements AutoSyncedComponent {
         nickNames.remove(player.getUuid());
     }
     public void setHexColor(ServerPlayerEntity player, TextColor color){
-        nameStyles.compute(player.getUuid(), (uuid, style) -> {
-            if (style == null){
-                return Style.EMPTY.withColor(color);
-            } else {
-                return style.withColor(color);
-            }
-        });
+        nameStyles.compute(player.getUuid(), (uuid, style) -> Objects.requireNonNullElse(style, Style.EMPTY).withColor(color));
     }
     public void clearStyle(ServerPlayerEntity player){
         nameStyles.remove(player.getUuid());
     }
     public void addFormatting(ServerPlayerEntity player, Formatting formatting){
-        nameStyles.compute(player.getUuid(), (uuid, style) -> {
-            if (style == null){
-                return Style.EMPTY.withFormatting(formatting);
-            } else {
-                return style.withFormatting(formatting);
-            }
-        });
+        nameStyles.compute(player.getUuid(), (uuid, style) -> Objects.requireNonNullElse(style, Style.EMPTY).withFormatting(formatting));
     }
     public void clearTag(ServerPlayerEntity player){
         tags.remove(player.getUuid());
@@ -117,16 +101,16 @@ public class NameComponent implements AutoSyncedComponent {
         return Optional.empty();
     }
     @Override
-    public void readData(ReadView readView) {
-        tags = readView.read("tags", Riftname.Codecs.PLAYER_NICK_NAME_CODEC).orElse(new HashMap<>());
-        nickNames = readView.read("nicknames", Riftname.Codecs.PLAYER_NICK_NAME_CODEC).orElse(new HashMap<>());
-        nameStyles = readView.read("nameStyles", Riftname.Codecs.PLAYER_STYLE_CODEC).orElse(new HashMap<>());
+    public void readFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
+        tags = Riftname.Codecs.PLAYER_NICK_NAME_CODEC.parse(wrapperLookup.getOps(NbtOps.INSTANCE), nbt.getCompound("tags")).result().orElse(new HashMap<>());
+        nickNames = Riftname.Codecs.PLAYER_NICK_NAME_CODEC.parse(wrapperLookup.getOps(NbtOps.INSTANCE), nbt.getCompound("nicknames")).result().orElse(new HashMap<>());
+        nameStyles = Riftname.Codecs.PLAYER_STYLE_CODEC.parse(wrapperLookup.getOps(NbtOps.INSTANCE), nbt.getCompound("nameStyles")).result().orElse(new HashMap<>());
     }
 
     @Override
-    public void writeData(WriteView writeView) {
-        writeView.put("tags", Riftname.Codecs.PLAYER_NICK_NAME_CODEC, tags);
-        writeView.put("nameStyles", Riftname.Codecs.PLAYER_STYLE_CODEC, nameStyles);
-        writeView.put("nicknames", Riftname.Codecs.PLAYER_NICK_NAME_CODEC, nickNames);
+    public void writeToNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
+        nbt.put("tags", Riftname.Codecs.PLAYER_NICK_NAME_CODEC.encodeStart(wrapperLookup.getOps(NbtOps.INSTANCE), tags).getOrThrow());
+        nbt.put("nameStyles", Riftname.Codecs.PLAYER_STYLE_CODEC.encodeStart(wrapperLookup.getOps(NbtOps.INSTANCE), nameStyles).getOrThrow());
+        nbt.put("nicknames", Riftname.Codecs.PLAYER_NICK_NAME_CODEC.encodeStart(wrapperLookup.getOps(NbtOps.INSTANCE), nickNames).getOrThrow());
     }
 }
