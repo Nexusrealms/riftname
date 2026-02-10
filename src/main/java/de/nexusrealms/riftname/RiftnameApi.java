@@ -17,50 +17,50 @@ public class RiftnameApi {
         return source.copy().setStyle(style);
     }
     public static void setTag(ServerPlayerEntity player, String tag){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setTag(player, Text.literal(tag), true);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).setTag(player, Text.literal(tag), true);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static void setTag(ServerPlayerEntity player, Text tag){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setTag(player, sanitize(tag), false);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).setTag(player, sanitize(tag), false);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static Optional<Boolean> toggleTagStyleOverride(ServerPlayerEntity player){
-        Optional<Boolean> b = player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).toggleTagStyleOverride(player);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        Optional<Boolean> b = player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).toggleTagStyleOverride(player);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
         return b;
     }
     public static void clearTag(ServerPlayerEntity player){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).clearTag(player);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).clearTag(player);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static void setNick(ServerPlayerEntity player, String nick){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setNick(player, Text.literal(nick), true);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).setNick(player, Text.literal(nick), true);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static void setNick(ServerPlayerEntity player, Text nick){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setNick(player, sanitize(nick), false);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).setNick(player, sanitize(nick), false);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static Optional<Boolean> toggleNickStyleOverride(ServerPlayerEntity player){
-        Optional<Boolean> b = player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).toggleNickStyleOverride(player);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        Optional<Boolean> b = player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).toggleNickStyleOverride(player);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
         return b;
     }
     public static void clearNick(ServerPlayerEntity player){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).clearNick(player);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).clearNick(player);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static void clearStyle(ServerPlayerEntity player){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).clearStyle(player);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).clearStyle(player);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static void setHexColor(ServerPlayerEntity player, TextColor color){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).setHexColor(player, color);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).setHexColor(player, color);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static void addFormatting(ServerPlayerEntity player, Formatting formatting){
-        player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).addFormatting(player, formatting);
-        Riftname.NAME_COMPONENT.sync(player.getScoreboard());
+        player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).addFormatting(player, formatting);
+        Riftname.NAME_COMPONENT.sync(player.getEntityWorld().getScoreboard());
     }
     public static Text getFormattedName(Text name, UUID uuid, Scoreboard scoreboard){
         if(!Riftname.NAME_COMPONENT.isProvidedBy(scoreboard)) return name;
@@ -68,6 +68,6 @@ public class RiftnameApi {
         return component.getFormattedName(name, uuid);
     }
     public static Optional<Text> getFormattedTag(ServerPlayerEntity player){
-        return player.getScoreboard().getComponent(Riftname.NAME_COMPONENT).getFormattedTag(player);
+        return player.getEntityWorld().getScoreboard().getComponent(Riftname.NAME_COMPONENT).getFormattedTag(player);
     }
 }

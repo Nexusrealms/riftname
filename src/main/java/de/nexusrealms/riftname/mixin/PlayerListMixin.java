@@ -14,6 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class PlayerListMixin {
     @Inject(method = "getPlayerName", at = @At("RETURN"), cancellable = true)
     private void onGetDisplayName(PlayerListEntry entry, CallbackInfoReturnable<Text> cir) {
-        cir.setReturnValue(RiftnameApi.getFormattedName(cir.getReturnValue(), entry.getProfile().getId(), MinecraftClient.getInstance().player.getScoreboard()));
+        cir.setReturnValue(RiftnameApi.getFormattedName(cir.getReturnValue(), entry.getProfile().id(), MinecraftClient.getInstance().world.getScoreboard()));
     }
 }

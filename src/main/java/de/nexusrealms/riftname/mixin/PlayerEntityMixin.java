@@ -15,13 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
-    @Shadow public abstract Scoreboard getScoreboard();
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
     @Inject(method = "getDisplayName", at = @At("TAIL"), cancellable = true)
     public void getFormattedName(CallbackInfoReturnable<Text> cir){
-        cir.setReturnValue(RiftnameApi.getFormattedName(cir.getReturnValue(), getUuid(), getScoreboard()));
+        cir.setReturnValue(RiftnameApi.getFormattedName(cir.getReturnValue(), getUuid(), getEntityWorld().getScoreboard()));
     }
 }
